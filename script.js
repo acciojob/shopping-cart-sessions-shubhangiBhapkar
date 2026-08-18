@@ -1,6 +1,3 @@
-// This is the boilerplate code given for you
-// You can modify this code
-// Product data
 const products = [
   { id: 1, name: "Product 1", price: 10 },
   { id: 2, name: "Product 2", price: 20 },
@@ -11,6 +8,7 @@ const products = [
 
 // DOM elements
 const productList = document.getElementById("product-list");
+const cartUl = document.getElementById("cart-list");
 let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
 
 // Render product list
@@ -25,41 +23,50 @@ function renderProducts() {
 
 // Render cart list
 function renderCart() {
-	// const showCart = document.createElement("div");
-	// showcart.innerHTML = sessionStorage.getItem()
-	
+  cartUl.innerHTML="";
+  let currentCart = sessionStorage.getItem('cart');
+  const cartlist = currentCart ? JSON.parse(currentCart) :[];
+  console.log(cartlist)
+  cartlist.forEach(product => {
+    const li = document.createElement("li");
+    li.textContent += `${product.Name} - ₹${product.Price}`;
+    cartUl.appendChild(li);
+});
 }
 
 // Add item to cart
 function addToCart(productId) {
-    console.log("product added in cart", productId);
+    
 
     const selectedProduct = products.find(
         product => product.id == productId
     );
+    
 
-    cart.push(selectedProduct);
-    console.log(cart);
-    window.sessionStorage.setItem("cart", JSON.stringify(cart));
+    let currentCart = sessionStorage.getItem('cart');
 
-    console.log(selectedProduct.name);
-    console.log(selectedProduct.price);
-
+    const cartlist = currentCart ?JSON.parse(currentCart) :[];
     let prodObj = {
         Name: selectedProduct.name,
         Price: selectedProduct.price
     };
-    sessionStorage.setItem("cart", JSON.stringify(prodObj));
+    cartlist.push(prodObj);
+    sessionStorage.setItem('cart', JSON.stringify(cartlist));
+    renderCart();
+    
+   
 }
 // Remove item from cart
 function removeFromCart(productId) {
-  console.log("removing item from cart..");
+  
 	sessionStorage.removeItem("cart");
+  
 }
 
 // Clear cart
 function clearCart() {
 	sessionStorage.clear();
+  cartUl.innerHTML="";
 }
 
 // Initial render
