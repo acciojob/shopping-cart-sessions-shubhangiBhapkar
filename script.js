@@ -52,21 +52,25 @@ function addToCart(productId) {
     };
     cartlist.push(prodObj);
     sessionStorage.setItem('cart', JSON.stringify(cartlist));
-    renderCart();
+    //renderCart();
     
    
 }
 // Remove item from cart
 function removeFromCart(productId) {
-  
-	sessionStorage.removeItem("cart");
-  
+  let currentCart = sessionStorage.getItem('cart');
+  const cartlist = currentCart ?JSON.parse(currentCart) :[];
+	
+	const selectedProduct = products.find(
+        product => product.id == productId
+    );
+  sessionStorage.removeItem(selectedProduct);
 }
 
 // Clear cart
 function clearCart() {
-	sessionStorage.clear();
-  cartUl.innerHTML="";
+	   sessionStorage.removeItem("cart");   
+    cartUl.innerHTML = "";
 }
 
 // Initial render
